@@ -30,9 +30,9 @@ y_scale = []
 # x軸を共有するかどうか 'all' or 'none'
 x_share = 'none'
 # 出力の際の名前
-output_name = 'versatile.png'
+output_name = 'out.png'
 # 出力先のパス
-output_path = 'C:\\Users\\kouhe\\Desktop\\研究会資料\\20221102_labmtg\\img\\'
+output_path = '.\\'
 #############################################################################################
 
 # figとaxesの初期化
@@ -85,7 +85,7 @@ else:
         if num_graph <= len(ylabels):
             axes[i].set_ylabel(ylabels[i])
         axes[i].grid()
-        axes[i].set_xlim(time[0], 400)
+        axes[i].set_xlim(time[0], time[-1])
         axes[i].minorticks_on()
         axes[0].legend()
 
