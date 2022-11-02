@@ -33,6 +33,8 @@ x_share = 'none'
 output_name = 'out.png'
 # 出力先のパス
 output_path = '.\\'
+# x軸の範囲の指定、なかったらNone
+xlim = [None, None]
 #############################################################################################
 
 # figとaxesの初期化
@@ -60,7 +62,7 @@ if num_graph == 1:
         if num_graph <= len(ylabels):
             axes.set_ylabel(ylabels[i])
         axes.grid()
-        axes.set_xlim(time[0], time[-1])
+        axes.set_xlim(xlim[0] if xlim[0] else time[0], xlim[1] if xlim[1] else time[-1])
         axes.minorticks_on()
         axes.legend()
 
@@ -85,7 +87,7 @@ else:
         if num_graph <= len(ylabels):
             axes[i].set_ylabel(ylabels[i])
         axes[i].grid()
-        axes[i].set_xlim(time[0], time[-1])
+        axes[i].set_xlim(xlim[0] if xlim[0] else time[0], xlim[1] if xlim[1] else time[-1])
         axes[i].minorticks_on()
         axes[0].legend()
 
