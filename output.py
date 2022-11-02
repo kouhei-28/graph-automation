@@ -35,12 +35,15 @@ output_name = 'out.png'
 output_path = '.\\'
 # x軸の範囲の指定、なかったらNone
 xlim = [None, None]
+# グラフ数の指定、なかったらNone
+num_graph = None
 #############################################################################################
 
 # figとaxesの初期化
 csvs = glob.glob("*.csv")
 datas = np.loadtxt(csvs[0], delimiter=',', encoding="utf-8", dtype = "float", skiprows=skiprow)
-num_graph = len(datas[0,:]) - 1
+if num_graph is None:
+    num_graph = len(datas[0,:]) - 1
 fig, axes = plt.subplots(num_graph, 1, figsize=(6.4, 4.8), sharex=x_share)
 
 ################## axesが1つの場合 ############################################################
@@ -49,7 +52,7 @@ if num_graph == 1:
     for j, csv in enumerate(csvs):
         datas = np.loadtxt(csv, delimiter=',', encoding="utf-8", dtype = "float", skiprows=skiprow)
         time = datas[:,0]*x_scale
-        for i in range(len(datas[0,:])-1):
+        for i in range(num_graph):
             if len(csvs) <= len(labels):
                 axes.plot(time, datas[:,i+1]*y_scale[i] if num_graph <= len(y_scale) else datas[:,i+1], label=labels[j], linewidth= line_width)
             else:
@@ -72,7 +75,7 @@ else:
     for j, csv in enumerate(csvs):
         datas = np.loadtxt(csv, delimiter=',', encoding="utf-8", dtype = "float", skiprows=skiprow)
         time = datas[:,0]*x_scale
-        for i in range(len(datas[0,:])-1):
+        for i in range(num_graph):
             if len(csvs) <= len(labels):
                 axes[i].plot(time, datas[:,i+1]*y_scale[i] if num_graph <= len(y_scale) else datas[:,i+1], label=labels[j], linewidth= line_width)
             else:
