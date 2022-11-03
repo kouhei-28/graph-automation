@@ -19,12 +19,14 @@ function.output_graph(
     # y軸の値の倍率
     y_scale = [1, 1, 1e-3], 
     # x軸を共有するかどうか 'all' or 'none'
-    x_share = 'all', 
+    x_share = 'none', 
     # 出力の際の名前
     output_name = 'out.png', 
     # 出力先のパス
     output_path = '.\\', 
     # x軸の範囲の指定、なかったらNone
     xlim = [None, None], 
+    # グラフの数の指定、なかったらNone
+    num_graph = None
     #############################################################################################
 )
