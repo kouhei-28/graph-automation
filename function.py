@@ -27,7 +27,10 @@ def output_graph(
     output_path = '.\\', 
     # x軸の範囲の指定、なかったらNone
     xlim = [None, None], 
+    # グラフの数の指定、なかったらNone
+    num_graph = None
 ):
+
     plt.rcParams["font.size"] = font_size
     plt.rcParams['xtick.direction'] = 'in'
     plt.rcParams['ytick.direction'] = 'in'
@@ -39,56 +42,36 @@ def output_graph(
     # figとaxesの初期化
     csvs = glob.glob("*.csv")
     datas = np.loadtxt(csvs[0], delimiter=',', encoding="utf-8", dtype = "float", skiprows=skiprow)
-    num_graph = len(datas[0,:]) - 1
+    if num_graph is None:
+        num_graph = len(datas[0,:]) - 1
     fig, axes = plt.subplots(num_graph, 1, figsize=(6.4, 4.8), sharex=x_share)
 
-    ################## axesが1つの場合 ############################################################
+    # axesが1つの場合
     if num_graph == 1:
-        # プロット
-        for j, csv in enumerate(csvs):
-            datas = np.loadtxt(csv, delimiter=',', encoding="utf-8", dtype = "float", skiprows=skiprow)
-            time = datas[:,0]*x_scale
-            for i in range(len(datas[0,:])-1):
-                if len(csvs) <= len(labels):
-                    axes.plot(time, datas[:,i+1]*y_scale[i] if num_graph <= len(y_scale) else datas[:,i+1], label=labels[j], linewidth= line_width)
-                else:
-                    axes.plot(time, datas[:,i+1]*y_scale[i] if num_graph <= len(y_scale) else datas[:,i+1], linewidth= line_width)
-
-        # グリッドなどの設定
+        axes = [axes]
+    
+    # プロット
+    for j, csv in enumerate(csvs):
+        datas = np.loadtxt(csv, delimiter=',', encoding="utf-8", dtype = "float", skiprows=skiprow)
+        time = datas[:,0]*x_scale
         for i in range(num_graph):
-            if x_share == 'all' and i == num_graph - 1:
-                axes.set_xlabel(xlabel)
-            if num_graph <= len(ylabels):
-                axes.set_ylabel(ylabels[i])
-            axes.grid()
-            axes.set_xlim(xlim[0] if xlim[0] else time[0], xlim[1] if xlim[1] else time[-1])
-            axes.minorticks_on()
-            axes.legend()
+            if len(csvs) <= len(labels):
+                axes[i].plot(time, datas[:,i+1]*y_scale[i] if num_graph <= len(y_scale) else datas[:,i+1], label=labels[j], linewidth= line_width)
+            else:
+                axes[i].plot(time, datas[:,i+1]*y_scale[i] if num_graph <= len(y_scale) else datas[:,i+1], linewidth= line_width)
 
-    ################## axesが複数の場合 ############################################################
-    else:
-        # プロット
-        for j, csv in enumerate(csvs):
-            datas = np.loadtxt(csv, delimiter=',', encoding="utf-8", dtype = "float", skiprows=skiprow)
-            time = datas[:,0]*x_scale
-            for i in range(len(datas[0,:])-1):
-                if len(csvs) <= len(labels):
-                    axes[i].plot(time, datas[:,i+1]*y_scale[i] if num_graph <= len(y_scale) else datas[:,i+1], label=labels[j], linewidth= line_width)
-                else:
-                    axes[i].plot(time, datas[:,i+1]*y_scale[i] if num_graph <= len(y_scale) else datas[:,i+1], linewidth= line_width)
-
-        # グリッドなどの設定
-        for i in range(num_graph):
-            if x_share == 'all' and i == num_graph - 1:
-                axes[i].set_xlabel(xlabel)
-            elif x_share != 'all':
-                axes[i].set_xlabel(xlabel)
-            if num_graph <= len(ylabels):
-                axes[i].set_ylabel(ylabels[i])
-            axes[i].grid()
-            axes[i].set_xlim(xlim[0] if xlim[0] else time[0], xlim[1] if xlim[1] else time[-1])
-            axes[i].minorticks_on()
-            axes[0].legend()
+    # グリッドなどの設定
+    for i in range(num_graph):
+        if x_share == 'all' and i == num_graph - 1:
+            axes[i].set_xlabel(xlabel)
+        elif x_share != 'all':
+            axes[i].set_xlabel(xlabel)
+        if num_graph <= len(ylabels):
+            axes[i].set_ylabel(ylabels[i])
+        axes[i].grid()
+        axes[i].set_xlim(xlim[0] if xlim[0] else time[0], xlim[1] if xlim[1] else time[-1])
+        axes[i].minorticks_on()
+        axes[0].legend()
 
     fig.tight_layout()
     plt.savefig(output_path+output_name)
