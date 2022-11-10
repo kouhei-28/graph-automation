@@ -32,7 +32,9 @@ def output_graph(
     # グラフの高さを指定
     height = 1, 
     # グラフの幅を指定
-    width = 1
+    width = 1, 
+    # 凡例の位置
+    legend_posi = 0
 ):
 
     plt.rcParams["font.size"] = font_size
@@ -75,7 +77,8 @@ def output_graph(
         axes[i].grid()
         axes[i].set_xlim(xlim[0] if xlim[0] else time[0], xlim[1] if xlim[1] else time[-1])
         axes[i].minorticks_on()
-        axes[0].legend()
+        if legend_posi == i:
+            axes[i].legend()
 
     fig.tight_layout()
     plt.savefig(output_path+output_name)
