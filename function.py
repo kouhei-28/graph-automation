@@ -34,7 +34,9 @@ def output_graph(
     # グラフの幅を指定
     width = 1, 
     # 凡例の位置
-    legend_posi = 0
+    legend_posi = 0,
+    # 表示するグラフの選択
+    display_graph = [1, 2]
 ):
 
     plt.rcParams["font.size"] = font_size
@@ -48,37 +50,34 @@ def output_graph(
     # figとaxesの初期化
     csvs = glob.glob("*.csv")
     datas = np.loadtxt(csvs[0], delimiter=',', encoding="utf-8", dtype = "float", skiprows=skiprow)
-    if num_graph is None:
-        num_graph = len(datas[0,:]) - 1
-    fig, axes = plt.subplots(num_graph, 1, figsize=(6.4*width, 4.8*height), sharex=x_share)
+    if not display_graph:
+        display_graph = range(len(datas[0,:])-1)
+    fig, axes = plt.subplots(len(display_graph), 1, figsize=(6.4*width, 4.8*height), sharex=x_share)
 
     # axesが1つの場合
-    if num_graph == 1:
+    if len(display_graph) == 1:
         axes = [axes]
     
     # プロット
     for j, csv in enumerate(csvs):
         datas = np.loadtxt(csv, delimiter=',', encoding="utf-8", dtype = "float", skiprows=skiprow)
         time = datas[:,0]*x_scale
-        for i in range(num_graph):
+        for k, i in enumerate(display_graph):
             if len(csvs) <= len(labels):
-                axes[i].plot(time, datas[:,i+1]*y_scale[i] if num_graph <= len(y_scale) else datas[:,i+1], label=labels[j], linewidth= line_width)
+                axes[k].plot(time, datas[:,i]*y_scale[i-1] if len(display_graph) <= len(y_scale) else datas[:,i], label=labels[j], linewidth= line_width)
             else:
-                axes[i].plot(time, datas[:,i+1]*y_scale[i] if num_graph <= len(y_scale) else datas[:,i+1], linewidth= line_width)
+                axes[k].plot(time, datas[:,i]*y_scale[i-1] if len(display_graph) <= len(y_scale) else datas[:,i], linewidth= line_width)
 
     # グリッドなどの設定
-    for i in range(num_graph):
-        if x_share == 'all' and i == num_graph - 1:
-            axes[i].set_xlabel(xlabel)
-        elif x_share != 'all':
-            axes[i].set_xlabel(xlabel)
-        if num_graph <= len(ylabels):
-            axes[i].set_ylabel(ylabels[i])
-        axes[i].grid()
-        axes[i].set_xlim(xlim[0] if xlim[0] else time[0], xlim[1] if xlim[1] else time[-1])
-        axes[i].minorticks_on()
-        if legend_posi == i:
-            axes[i].legend()
+    for k, i in enumerate(display_graph):
+        axes[k].set_xlabel(xlabel)
+        if len(display_graph) <= len(ylabels):
+            axes[k].set_ylabel(ylabels[k])
+        axes[k].grid()
+        axes[k].set_xlim(xlim[0] if xlim[0] else time[0], xlim[1] if xlim[1] else time[-1])
+        axes[k].minorticks_on()
+        if legend_posi == k:
+            axes[k].legend()
 
     fig.tight_layout()
     plt.savefig(output_path+output_name)
