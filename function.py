@@ -28,7 +28,13 @@ def output_graph(
     # x軸の範囲の指定、なかったらNone
     xlim = [None, None], 
     # グラフの数の指定、なかったらNone
-    num_graph = None
+    num_graph = None, 
+    # グラフの高さを指定
+    height = 1, 
+    # グラフの幅を指定
+    width = 1, 
+    # 凡例の位置
+    legend_posi = 0
 ):
 
     plt.rcParams["font.size"] = font_size
@@ -44,7 +50,7 @@ def output_graph(
     datas = np.loadtxt(csvs[0], delimiter=',', encoding="utf-8", dtype = "float", skiprows=skiprow)
     if num_graph is None:
         num_graph = len(datas[0,:]) - 1
-    fig, axes = plt.subplots(num_graph, 1, figsize=(6.4, 4.8), sharex=x_share)
+    fig, axes = plt.subplots(num_graph, 1, figsize=(6.4*width, 4.8*height), sharex=x_share)
 
     # axesが1つの場合
     if num_graph == 1:
@@ -71,7 +77,8 @@ def output_graph(
         axes[i].grid()
         axes[i].set_xlim(xlim[0] if xlim[0] else time[0], xlim[1] if xlim[1] else time[-1])
         axes[i].minorticks_on()
-        axes[0].legend()
+        if legend_posi == i:
+            axes[i].legend()
 
     fig.tight_layout()
     plt.savefig(output_path+output_name)
