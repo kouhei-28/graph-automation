@@ -1,10 +1,10 @@
 import function
 import json
 
-json_open = open('original.json', 'r')
-json_load = json.load(json_open)
+# json_open = open('original.json', 'r')
+# json_load = json.load(json_open)
 
-function.output_graph(**json_load)
+function.output_graph(output_name = 'out.svg', x_share='all', display_graph=[1,2,3])
 
 # function.output_graph(
 #     ############################## 各種パラメータの設定 ############################################
