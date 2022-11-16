@@ -4,9 +4,9 @@ import glob
 import pandas as pd
 
 # プロット
-def plot(axes, datas, time, display_graph, labels, y_scale, line_width, j):
+def plot(axes, datas, time, display_graph, labels, y_scale, line_width, j, length):
     for k, i in enumerate(display_graph):
-        if len(datas) <= len(labels):
+        if length <= len(labels):
             axes[k].plot(time, datas[:,i]*y_scale[i-1] if len(display_graph) <= len(y_scale) else datas[:,i], label=labels[j], linewidth= line_width)
         else:
             axes[k].plot(time, datas[:,i]*y_scale[i-1] if len(display_graph) <= len(y_scale) else datas[:,i], linewidth= line_width)
@@ -79,21 +79,21 @@ def output_graph(
         for j, csv in enumerate(csvs):
             datas = np.loadtxt(csv, delimiter=',', encoding="utf-8", dtype = "float", skiprows=skiprow)
             time = datas[:,0]*x_scale
-            plot(axes, datas, time, display_graph, labels, y_scale, line_width, j)
+            plot(axes, datas, time, display_graph, labels, y_scale, line_width, j, length=len(csvs))
 
     if glob.glob("*.txt"):
         txts = glob.glob("*.txt")
         for j, txt in enumerate(txts):
             datas = np.loadtxt(txt, delimiter=',', encoding="utf-8", dtype = "float", skiprows=skiprow)
             time = datas[:,0]*x_scale
-            plot(axes, datas, time, display_graph, labels, y_scale, line_width, j)
+            plot(axes, datas, time, display_graph, labels, y_scale, line_width, j, length=len(txts))
 
     if glob.glob("*.xlsx"):
         xlsxs = glob.glob("*.xlsx")
         for j, xlsx in enumerate(xlsxs):
             datas = pd.ExcelFile(xlsx).parse(pd.ExcelFile(xlsx).sheet_names[0]).to_numpy()
             time = datas[:,0]*x_scale
-            plot(axes, datas, time, display_graph, labels, y_scale, line_width, j)
+            plot(axes, datas, time, display_graph, labels, y_scale, line_width, j, length=len(xlsxs))
     
     # グラフの体裁を整える
     format_graph(axes, time, display_graph, xlabel, ylabels, xlim, legend_posi)
