@@ -41,8 +41,6 @@ def output_graph(
     x_scale = 1, 
     # y軸の値の倍率
     y_scale = [], 
-    # x軸を共有するかどうか 'all' or 'none'
-    x_share = 'none', 
     # 出力の際の名前
     output_name = 'out.png', 
     # 出力先のパス
@@ -71,7 +69,7 @@ def output_graph(
     # datas = select_display_graph(display_graph, skiprow)
     
     # figとaxesの初期化
-    fig, axes = plt.subplots(len(display_graph), 1, figsize=(6.4*width, 4.8*height), sharex=x_share)
+    fig, axes = plt.subplots(len(display_graph), 1, figsize=(6.4*width, 4.8*height), sharex=True)
     # axesが1つの場合
     if len(display_graph) == 1:
         axes = [axes]
