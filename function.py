@@ -74,6 +74,10 @@ def output_graph(
     if len(display_graph) == 1:
         axes = [axes]
 
+    # if glob.glob("~$*.xlsx"):
+    #     print("Please close Excel file. ")
+    #     return
+
     if glob.glob("*.csv"):
         csvs = glob.glob("*.csv")
         for j, csv in enumerate(csvs):
@@ -91,6 +95,8 @@ def output_graph(
     if glob.glob("*.xlsx"):
         xlsxs = glob.glob("*.xlsx")
         for j, xlsx in enumerate(xlsxs):
+            if "~$" in xlsx:
+                continue
             datas = pd.ExcelFile(xlsx).parse(pd.ExcelFile(xlsx).sheet_names[0]).to_numpy()
             time = datas[:,0]*x_scale
             plot(axes, datas, time, display_graph, labels, y_scale, line_width, j, length=len(xlsxs))
