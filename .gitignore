@@ -2,3 +2,4 @@
 *.svg
 *.pyc
 *.json
+~$*.xlsx

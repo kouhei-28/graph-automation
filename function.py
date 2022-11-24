@@ -97,9 +97,10 @@ def output_graph(
         for j, xlsx in enumerate(xlsxs):
             if "~$" in xlsx:
                 continue
-            datas = pd.ExcelFile(xlsx).parse(pd.ExcelFile(xlsx).sheet_names[0]).to_numpy()
-            time = datas[:,0]*x_scale
-            plot(axes, datas, time, display_graph, labels, y_scale, line_width, j, length=len(xlsxs))
+            for i in range(len(pd.ExcelFile(xlsx).sheet_names)):
+                datas = pd.ExcelFile(xlsx).parse(pd.ExcelFile(xlsx).sheet_names[i]).to_numpy()
+                time = datas[:,0]*x_scale
+                plot(axes, datas, time, display_graph, labels, y_scale, line_width, j, length=len(xlsxs))
     
     # グラフの体裁を整える
     format_graph(axes, time, display_graph, xlabel, ylabels, xlim, legend_posi)
